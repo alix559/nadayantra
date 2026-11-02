@@ -1,0 +1,232 @@
+/* shabdayantra: quiet surfaces, one typeface, colour only where a sound has been learned.
+   Observable's layout and its light and dark themes come first; everything after is ours. */
+@import url("observablehq:default.css");
+@import url("observablehq:theme-air.css") (prefers-color-scheme: light);
+@import url("observablehq:theme-near-midnight.css") (prefers-color-scheme: dark);
+
+:root {
+  --ink: #1d1d1f; --mute: #6e6e73; --paper: #fbfbfd; --raised: #fff;
+  --fill: rgb(0 0 0 / .045); --fill2: rgb(0 0 0 / .08); --line: rgb(0 0 0 / .1);
+  --accent: #0071e3; --go: #34c759; --stop: #ff453a;
+  --ease: cubic-bezier(.2, .8, .2, 1);
+  --sans-serif: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", system-ui, "Apple Symbols", sans-serif;
+  --observablehq-max-width: 1100px;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --ink: #f5f5f7; --mute: #98989d; --paper: #0b0b0d; --raised: #1c1c1e;
+    --fill: rgb(255 255 255 / .07); --fill2: rgb(255 255 255 / .12); --line: rgb(255 255 255 / .14); --accent: #0a84ff }
+}
+
+html, body { background: var(--paper); color: var(--ink) }
+body { font: 17px/1.5 var(--sans-serif); letter-spacing: -.011em }
+#observablehq-center { margin: 0 auto; padding: 0 1.5rem; max-width: 980px }
+#observablehq-main { margin: 0; min-height: 0; padding-bottom: 8rem }
+#observablehq-main :is(p, h1, h2, h3, h4, table, figure) { max-width: none }
+#observablehq-main h1, #observablehq-main h2, #observablehq-main h3, #observablehq-main h4 { color: var(--ink) }
+#observablehq-main > * { margin-block: 0 }
+small { color: var(--mute) }
+a[href] { color: var(--accent) }
+::selection { background: color-mix(in srgb, var(--accent) 30%, transparent) }
+code { font: inherit; font-family: var(--sans-serif); background: none; padding: 0 }
+
+/* --- navigation: a wordmark, three quiet tabs, the model's state */
+nav.top { display: flex; align-items: center; justify-content: space-between; padding: 1.3rem 0 0 }
+nav.top > div { display: flex; align-items: center; gap: .15rem }
+nav.top img { width: 84px; height: 84px; border-radius: 20px; box-shadow: 0 10px 24px -12px rgb(0 0 0 / .5) }
+nav.top strong { font-weight: 600; font-size: 1.25rem; letter-spacing: -.025em; margin-left: .8rem; color: var(--ink) }
+nav.top a { color: var(--mute); text-decoration: none; font-size: .9rem; padding: .4rem .95rem; border-radius: 999px; transition: color .2s, background .2s }
+nav.top a:hover { color: var(--ink); background: var(--fill); text-decoration: none }
+nav.top a[aria-current=page] { color: var(--ink); background: var(--fill2) }
+#nstat { display: inline-flex; align-items: center; gap: .5rem; margin-left: .8rem; padding: .3rem .8rem; border-radius: 999px; font-size: .8rem; font-weight: 500; color: var(--ink); background: var(--fill); white-space: nowrap }
+#nstat em { font-style: normal; font-weight: 400; color: var(--mute); text-transform: uppercase; font-size: .7rem; letter-spacing: .04em }
+#nstat .dot { width: .55rem; height: .55rem; border-radius: 50%; background: var(--mute) }
+#nstat.ready .dot { background: var(--go); box-shadow: 0 0 0 3px color-mix(in srgb, var(--go) 25%, transparent), 0 0 8px var(--go) }
+#nstat.starting .dot { background: #ff9f0a; animation: breathe 1s ease-in-out infinite alternate }
+#nstat.failed { color: var(--stop) }
+#nstat.failed .dot { background: var(--stop) }
+@keyframes breathe { to { opacity: .3; transform: scale(.7) } }
+.busy::before { content: ''; display: inline-block; width: .7em; height: .7em; margin-right: .5em; border: 1.5px solid var(--fill2); border-top-color: var(--ink); border-radius: 50%; animation: spin .8s linear infinite; vertical-align: -.05em }
+@keyframes spin { to { transform: rotate(360deg) } }
+
+/* --- a page opens with one line */
+.hero { padding: 3.6rem 0 2rem }
+.hero h1 { font-size: clamp(2.2rem, 5.5vw, 3.4rem); font-weight: 700; letter-spacing: -.035em; line-height: 1.05; margin: 0 0 .7rem }
+.hero p { font-size: 1.2rem; color: var(--mute); margin: 0; letter-spacing: -.015em }
+
+.ok { color: var(--go) }
+.err { color: var(--stop) }
+.warn { color: #ff9f0a }
+.msg { margin: 1rem 0; min-height: 1.4rem; font-size: .95rem; color: var(--mute) }
+.msg:empty { display: none }
+.msg.ok { color: var(--go) } .msg.err { color: var(--stop) } .msg.warn { color: #ff9f0a }
+.msg.busy::before { content: ''; display: inline-block; width: .7em; height: .7em; margin-right: .5em; border: 1.5px solid var(--fill2); border-top-color: var(--ink); border-radius: 50%; animation: spin .8s linear infinite; vertical-align: -.05em }
+.msg b.err { color: var(--stop); font-weight: 600 }
+
+.splash { position: fixed; inset: 0; z-index: 9; display: grid; place-content: center; justify-items: center; gap: .7rem; text-align: center; background: var(--paper) }
+.splash img { width: 112px; border-radius: 25px; box-shadow: 0 18px 40px -16px rgb(0 0 0 / .5) }
+.splash p { margin: .4rem 0 0; font-size: 1.1rem }
+.splash small { max-width: 28rem }
+.splash .row2 { display: flex; gap: .7rem; margin-top: .6rem }
+
+/* --- controls */
+input:not([type=checkbox], [type=radio], [type=range]), select, textarea {
+  font: inherit; font-size: .95rem; letter-spacing: inherit; color: var(--ink); background: var(--fill); border: 0; border-radius: 14px; padding: .6rem .9rem; outline: 0; box-sizing: border-box;
+  transition: box-shadow .2s var(--ease), background .2s }
+input:is(:focus-visible), select:focus-visible, textarea:focus-visible { background: var(--fill2); box-shadow: 0 0 0 3.5px color-mix(in srgb, var(--accent) 45%, transparent) }
+select { appearance: none; -webkit-appearance: none; padding-right: 2.2rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%238e8e93' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right .85rem center }
+::placeholder { color: var(--mute); opacity: .8 }
+option { color: #000 }
+
+button {
+  font: inherit; font-size: .95rem; font-weight: 500; letter-spacing: -.01em; border: 0; border-radius: 999px; background: var(--ink); color: var(--paper); padding: .6rem 1.3rem;
+  cursor: pointer; transition: transform .25s var(--ease), opacity .2s, background .2s }
+button:hover { opacity: .86; transform: translateY(-1px) }
+button:active { transform: scale(.97); opacity: 1 }
+button:focus-visible { outline: 0; box-shadow: 0 0 0 3.5px color-mix(in srgb, var(--accent) 50%, transparent) }
+button.secondary { background: var(--fill2); color: var(--ink) }
+button.outline { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 1px var(--line) }
+button.outline:focus-visible { box-shadow: inset 0 0 0 1px var(--line), 0 0 0 3.5px color-mix(in srgb, var(--accent) 50%, transparent) }
+button.contrast { background: var(--stop); color: #fff }
+button.sm { padding: .3rem .9rem; font-size: .85rem }
+button:disabled { opacity: .35; transform: none; cursor: default }
+
+input[type=checkbox].switch { appearance: none; -webkit-appearance: none; position: relative; flex: none; width: 2.9rem; height: 1.75rem; margin: 0; border-radius: 999px; background: var(--fill2); cursor: pointer; transition: background .25s }
+input[type=checkbox].switch::before { content: ''; position: absolute; top: .15rem; left: .15rem; width: 1.45rem; height: 1.45rem; border-radius: 50%; background: #fff; box-shadow: 0 2px 5px rgb(0 0 0 / .3); transition: transform .3s var(--ease) }
+input[type=checkbox].switch:checked { background: var(--go) }
+input[type=checkbox].switch:checked::before { transform: translateX(1.15rem) }
+input[type=checkbox].switch:focus-visible { outline: 0; box-shadow: 0 0 0 3.5px color-mix(in srgb, var(--accent) 45%, transparent) }
+
+progress { appearance: none; -webkit-appearance: none; border: 0; height: .35rem; border-radius: 999px; background: var(--fill2); overflow: hidden; vertical-align: middle }
+progress::-webkit-progress-bar { background: transparent }
+progress::-webkit-progress-value { background: var(--ink); border-radius: 999px }
+progress::-moz-progress-bar { background: var(--ink) }
+progress.meter { width: 8rem }
+
+/* the controls that drive a recording */
+.bar { display: flex; gap: .7rem; align-items: center; flex-wrap: wrap; padding: .65rem; border-radius: 26px; background: var(--fill) }
+.bar > * { margin: 0 }
+.bar input { width: 5.5rem; text-align: center }
+.bar select { width: auto; min-width: 9rem }
+.bar button.lg { padding: .8rem 1.5rem }
+.bar .live { display: none; align-items: center; gap: .7rem; flex-wrap: wrap }
+body.rec .bar .idle { display: none }
+body.rec .bar .live { display: flex }
+body.rec .tile:not(.recording), body.rec [data-rec] { pointer-events: none; opacity: .45 }
+.bar .secs { min-width: 5rem }
+
+/* a settings panel: each row a label on the left and its control on the right */
+.panel { border-radius: 26px; background: var(--fill); padding: .3rem 1.4rem; margin-bottom: 1.2rem }
+.ctl { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; margin: 0; padding: 1rem 0 }
+.ctl + .ctl { border-top: 1px solid var(--line) }
+.ctl .lbl { display: grid; gap: .15rem }
+.ctl .lbl strong { font-weight: 500; font-size: 1rem; color: var(--ink) }
+.ctl .lbl small { font-size: .85rem; line-height: 1.35 }
+.ctl select { min-width: 12rem; background-color: var(--raised) }
+.hold { display: flex; align-items: center; gap: .9rem; margin: 0 0 1rem }
+.hold small { font-size: .85rem }
+#scratch { display: block; width: 100%; font-size: 1.35rem; line-height: 1.5; padding: 1.2rem 1.4rem; border-radius: 22px; resize: vertical; margin: 0 0 .7rem; min-height: 8rem }
+.under { display: flex; justify-content: flex-end; margin-bottom: 2.4rem }
+
+/* --- glyph tiles. A glyph not yet taught is a quiet well; a taught one takes its colour,
+   a warm hue that runs from yellow to red across its section. */
+.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 10px; margin-bottom: 1.4rem }
+.tile { --h: calc(54 * (1 - var(--t))); position: relative; height: 98px; padding: 8px 10px 9px; display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+  text-align: center; cursor: pointer; border-radius: 24px; background: var(--fill); color: var(--ink); user-select: none; -webkit-user-select: none;
+  transition: transform .3s var(--ease), box-shadow .3s var(--ease), background .2s }
+.tile:hover { transform: translateY(-3px); background: var(--fill2) }
+.tile:active { transform: scale(.97) }
+.tile:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px }
+.tile.sel { outline: 2px solid var(--ink); outline-offset: 3px }
+.tile small { font-size: 10px; line-height: 1.15; color: var(--mute) }
+.tile b { font-size: 29px; font-weight: 400; line-height: 1; color: inherit }
+.tile i { font-size: 11px; font-weight: 500; letter-spacing: 0 }
+
+.tile.taught { background: linear-gradient(170deg, hsl(var(--h) 95% 78%), hsl(var(--h) 90% 64%));
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / .6), 0 10px 22px -12px hsl(var(--h) 90% 45% / .75) }
+.tile.match { background: linear-gradient(170deg, hsl(142 65% 70%), hsl(142 60% 52%)); box-shadow: inset 0 1px 0 rgb(255 255 255 / .6), 0 10px 22px -12px hsl(142 70% 35% / .8) }
+.tile.taught:hover, .tile.match:hover { filter: brightness(1.05) }
+.tile:is(.taught, .match), .tile:is(.taught, .match) * { color: #000 }  /* black on the colour, in light and dark */
+.tile.taught small, .tile.match small { opacity: .62; padding-inline: 12px }
+.tile.taught::after, .tile.match::after { content: '✓'; position: absolute; top: 5px; right: 10px; font-size: 11px; font-weight: 600 }
+/* a learned glyph has a hole punched in its top-left corner, the page showing through */
+.tile.taught::before, .tile.match::before { content: ''; position: absolute; top: 8px; left: 10px; width: 11px; height: 11px; border-radius: 50%;
+  background: var(--paper); box-shadow: inset 0 1.5px 2.5px rgb(0 0 0 / .6), 0 .5px 0 rgb(255 255 255 / .4) }
+.tile.recording { background: var(--raised); animation: pulse 1s infinite alternate }
+.tile.recording, .tile.recording * { color: var(--ink) }
+.tile.recording::after { content: '●'; position: absolute; top: 4px; right: 9px; color: var(--stop); font-size: 12px }
+@keyframes pulse { to { opacity: .55 } }
+
+/* the chosen glyph, floating over the page */
+.det { position: sticky; bottom: 1.1rem; z-index: 2; display: flex; gap: 1.2rem; align-items: center; padding: .9rem 1.3rem; border-radius: 28px;
+  background: color-mix(in srgb, var(--raised) 78%, transparent); -webkit-backdrop-filter: saturate(180%) blur(28px); backdrop-filter: saturate(180%) blur(28px);
+  box-shadow: 0 0 0 1px var(--line), 0 24px 48px -20px rgb(0 0 0 / .55) }
+.det:empty { display: none }
+.det .glyph { font-size: 46px; min-width: 66px; text-align: center; font-weight: 300; line-height: 1 }
+.det strong { color: var(--ink) }
+.acts { margin-left: auto; display: flex; gap: .7rem; align-items: center; flex-wrap: wrap; justify-content: flex-end }
+.acts small { text-align: right }
+
+/* --- rows: every taught sound, in its colour */
+.row { --h: calc(54 * (1 - var(--t, 0))); display: flex; gap: .8rem; align-items: center; margin-bottom: 8px; padding: .55rem 1rem; border-radius: 22px;
+  background: linear-gradient(170deg, hsl(var(--h) 95% 80%), hsl(var(--h) 90% 70%)); box-shadow: inset 0 1px 0 rgb(255 255 255 / .55) }
+.row > :is(span, strong, small, code, b, i), .row small { color: #000 }
+.row > span:first-child { font-size: 1.15rem; min-width: 1.4rem; text-align: center }
+.row small { white-space: nowrap; opacity: .62; font-size: .8rem }
+.row > input { flex: 1; min-width: 0 }
+.row > :nth-last-child(n+2):is(small) { margin-left: auto }
+.row :is(input, select) { margin: 0; padding: .35rem .7rem; background-color: rgb(255 255 255 / .55); color: #000; border-radius: 12px; font-size: .9rem }
+.row select { padding-right: 2rem }
+.row :is(input, select):focus-visible { background-color: rgb(255 255 255 / .85); box-shadow: 0 0 0 3px rgb(0 0 0 / .25) }
+.row button { padding: .3rem .8rem; background: #000; color: #fff; font-size: .85rem }
+.row button.outline { background: rgb(255 255 255 / .45); color: #000; box-shadow: none }
+.kp { display: flex; gap: .4rem }
+.kp input { width: 4.2rem; text-align: center }
+.kp select { width: 8.5rem }
+.hd { display: flex; justify-content: space-between; align-items: center }
+h4.sec { display: flex; justify-content: space-between; align-items: baseline; font-size: 1.4rem; font-weight: 600; letter-spacing: -.025em; margin: 2.4rem 0 1rem }
+h4.sec small { font-size: .9rem; font-weight: 400 }
+.stack > div + div { margin-top: 2.4rem }
+.stack p, p.empty { color: var(--mute); margin: 0 }
+
+/* the segmented switch between views */
+.tabs { display: inline-flex; margin: 1.6rem 0 0; padding: 3px; border-radius: 999px; background: var(--fill) }
+.tabs button { background: var(--raised); color: var(--ink); box-shadow: 0 1px 3px rgb(0 0 0 / .18); padding: .4rem 1.2rem; font-size: .88rem; transform: none; opacity: 1 }
+.tabs button.outline { background: transparent; color: var(--mute); box-shadow: none }
+
+/* --- the sound tree: keyboard > category > sound */
+.tree { position: relative; border-radius: 26px; background: var(--fill); overflow: hidden }
+.tree svg { display: block; width: 100%; height: auto; max-height: 70vh; touch-action: none }
+.tree .empty { padding: 2rem 1.6rem }
+.tree-zoom { position: absolute; top: .8rem; right: .8rem; z-index: 1; display: flex; gap: .35rem }
+.tree-zoom button { min-width: 2.2rem; background: color-mix(in srgb, var(--raised) 85%, transparent); box-shadow: 0 0 0 1px var(--line) }
+.tree text { font: 10px var(--sans-serif); fill: #000; pointer-events: none; user-select: none; -webkit-user-select: none }
+.tree .face { font-size: 15px }
+.tree .leaf rect { cursor: default }
+.tree .cell.dim { opacity: .5 }
+.tree .cell.hit > rect { stroke: var(--go); stroke-width: 3 }
+.tree svg { cursor: grab; overflow: hidden }
+.tree svg:active { cursor: grabbing }
+
+/* the result of recognising a sound */
+.recog { background: var(--fill); border-radius: 26px; padding: 1.5rem 1.7rem; margin: 1.2rem 0 }
+.recog:empty { display: none }
+.recog h2 { font-size: 2.2rem; font-weight: 600; letter-spacing: -.03em; margin: 0 0 1rem }
+.recog h2 small { font-size: 1rem; font-weight: 400 }
+.recog h3 { margin: 0 0 .3rem; font-size: 1.5rem }
+.mrow { display: flex; gap: .9rem; align-items: center; margin-bottom: .3rem }
+.mrow span { width: 8rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+.mrow progress { flex: 1 }
+.mrow small { min-width: 6.5rem; text-align: right }
+
+@media (max-width: 700px) {
+  .ctl { flex-wrap: wrap }
+  .det { flex-wrap: wrap; border-radius: 22px }
+  .acts { margin-left: 0; justify-content: flex-start }
+  .row { flex-wrap: wrap }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important } }
+
+[hidden] { display: none !important }
+.bar .idle { display: contents }

@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nadayantra"
+dynamic = ["version"]
+description = "Shabdayantra on the web: teach sounds to type glyphs, recognised by nada"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [{name = "Alex", email = "alixjcob559@gmail.com"}]
+keywords = ["nbdev", "fasthtml", "speech", "apl"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+]
+dependencies = [
+    "python-fasthtml",
+    "fastlite>=0.2.4,<0.3",
+    "numpy>=1.26",
+    "nada",
+]
+
+[project.urls]
+Repository = "https://github.com/alix559/nadayantra"
+Documentation = "https://alix559.github.io/nadayantra/"
+
+[project.scripts]
+nadayantra = "nadayantra.main:main"
+
+[project.entry-points.nbdev]
+nadayantra = "nadayantra._modidx:d"
+
+[tool.setuptools.dynamic]
+version = {attr = "nadayantra.__version__"}
+
+[tool.setuptools.packages.find]
+include = ["nadayantra"]
+
+[tool.nbdev]
+lib_path = "nadayantra"
+nbs_path = "nbs"
+doc_path = "_docs"

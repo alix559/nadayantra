@@ -1,0 +1,14 @@
+project:
+  output-dir: _docs
+
+website:
+  title: "nadayantra"
+  site-url: "https://alix559.github.io/nadayantra"
+  description: "Shabdayantra on the web: teach sounds to type glyphs, recognised by nada"
+  repo-branch: main
+  repo-url: "https://github.com/alix559/nadayantra"
+
+format-links:
+  - html
+  - format: commonmark
+    text: Markdown

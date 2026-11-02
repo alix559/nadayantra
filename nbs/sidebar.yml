@@ -1,0 +1,9 @@
+website:
+  sidebar:
+    contents:
+      - index.ipynb
+      - 00_core.ipynb
+      - 01_engine.ipynb
+      - 02_keys.ipynb
+      - 03_api.ipynb
+      - 04_main.ipynb

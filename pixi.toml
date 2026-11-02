@@ -1,0 +1,40 @@
+# FastHTML version of the shabdayantra app, built as an nbdev project.
+#
+#   pixi run serve          start the app at http://localhost:5001
+#   pixi run nbdev-export   export notebooks in nbs/ into the nadayantra package
+#   pixi run nbdev-test     run the notebook tests
+#   pixi run nbdev-preview  preview the docs
+#
+# The sound model is nada (wav2vec 2.0 on Modular MAX), the same one the macOS
+# app's helper runs. It is loaded in-process, so no helper process is needed.
+
+[workspace]
+name = "nadayantra"
+channels = ["https://conda.modular.com/max/", "conda-forge"]
+platforms = ["osx-arm64"]
+version = "0.1.0"
+
+[tasks]
+serve = { cmd = "nadayantra", description = "Run the web app on http://localhost:5001" }
+nbdev-export = { cmd = "nbdev-export", description = "Export notebooks into the nadayantra package" }
+nbdev-test = { cmd = "nbdev-test", description = "Run the notebook tests" }
+nbdev-clean = { cmd = "nbdev-clean", description = "Strip notebook metadata before committing" }
+nbdev-preview = { cmd = "nbdev-preview", description = "Preview the docs (needs Quarto)" }
+
+[dependencies]
+python = "3.14.*"
+max = ">=26.6.0,<27"
+numpy = ">=1.26"
+safetensors = ">=0.4"
+huggingface_hub = ">=0.26"
+nbdev = ">=3.3.26,<4"
+jupyter = ">=1.1.1,<2"
+
+[pypi-dependencies]
+nadayantra = { path = ".", editable = true }
+python-fasthtml = "*"
+nada = { path = "../nada", editable = true }
+fastlite = ">=0.2.4, <0.3"
+# Typing into other apps and watching the hold-to-talk key outside the browser (macOS only)
+pyobjc-framework-Quartz = "*"
+pyobjc-framework-ApplicationServices = "*"

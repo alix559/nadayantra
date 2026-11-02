@@ -1,0 +1,17 @@
+{
+  "name": "shabdayantra-frontend",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "observable preview --port 3000",
+    "build": "observable build",
+    "clean": "rimraf src/.observablehq/cache dist"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@observablehq/framework": "^1.13.4"
+  }
+}
