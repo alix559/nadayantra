@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.20">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="The FastHTML app: pages, routes and the taught-sound library.">
+
+<title>main – nadayantra</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-17888a1159294d3eb470f19f6f52f5a5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-66a38d7287321bc50e069add96f8c30e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="main – nadayantra">
+<meta property="og:description" content="The FastHTML app: pages, routes and the taught-sound library.">
+<meta property="og:site_name" content="nadayantra">
+<meta name="twitter:title" content="main – nadayantra">
+<meta name="twitter:description" content="The FastHTML app: pages, routes and the taught-sound library.">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-sidebar floating nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">nadayantra</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools tools-end">
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./main.html">main</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">nadayantra</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./core.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">core</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./engine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">engine</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./keys.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">keys</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./api.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">api</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./main.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">main</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#glyphs-symbol-meaning-devanagari-iast-in-four-sections" id="toc-glyphs-symbol-meaning-devanagari-iast-in-four-sections" class="nav-link active" data-scroll-target="#glyphs-symbol-meaning-devanagari-iast-in-four-sections">glyphs: [symbol, meaning, devanagari, iast], in four sections</a></li>
+  <li><a href="#what-a-sound-types-a-few-unicode-characters-or-a-named-special-key" id="toc-what-a-sound-types-a-few-unicode-characters-or-a-named-special-key" class="nav-link" data-scroll-target="#what-a-sound-types-a-few-unicode-characters-or-a-named-special-key">what a sound types: a few Unicode characters, or a named special key</a></li>
+  <li><a href="#taught-sounds-a-name-and-up-to-12-embeddings-float32-blob-each" id="toc-taught-sounds-a-name-and-up-to-12-embeddings-float32-blob-each" class="nav-link" data-scroll-target="#taught-sounds-a-name-and-up-to-12-embeddings-float32-blob-each">taught sounds: a name and up to 12 embeddings (float32 blob) each</a></li>
+  <li><a href="#page" id="toc-page" class="nav-link" data-scroll-target="#page">page</a></li>
+  <li><a href="#key-picker-type-any-characters-or-choose-a-special-key-blank-means-type-the-glyph" id="toc-key-picker-type-any-characters-or-choose-a-special-key-blank-means-type-the-glyph" class="nav-link" data-scroll-target="#key-picker-type-any-characters-or-choose-a-special-key-blank-means-type-the-glyph">key picker: type any characters, or choose a special key; blank means “type the glyph”</a></li>
+  <li><a href="#sound-names-teach-a-sound-per-glyph-make-it-again-to-get-the-name-back" id="toc-sound-names-teach-a-sound-per-glyph-make-it-again-to-get-the-name-back" class="nav-link" data-scroll-target="#sound-names-teach-a-sound-per-glyph-make-it-again-to-get-the-name-back">Sound Names: teach a sound per glyph, make it again to get the name back</a></li>
+  <li><a href="#sound-keyboard-hold-a-key-make-a-sound-let-go-the-matching-sound-types-its-key." id="toc-sound-keyboard-hold-a-key-make-a-sound-let-go-the-matching-sound-types-its-key." class="nav-link" data-scroll-target="#sound-keyboard-hold-a-key-make-a-sound-let-go-the-matching-sound-types-its-key.">Sound Keyboard: hold a key, make a sound, let go; the matching sound types its key.</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/alix559/nadayantra/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div><div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="main.html.md"><i class="bi bi-file-code"></i>Markdown</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">main</h1>
+</div>
+
+<div>
+  <div class="description">
+    The FastHTML app: pages, routes and the taught-sound library.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<p>Run it with <code>pixi run serve</code> (the <code>nadayantra</code> command). The app listens on <a href="http://127.0.0.1:5001" class="uri">http://127.0.0.1:5001</a>; the JSON API for the Observable frontend is mounted from <code>nadayantra.api</code>.</p>
+<section id="glyphs-symbol-meaning-devanagari-iast-in-four-sections" class="level2">
+<h2 class="anchored" data-anchor-id="glyphs-symbol-meaning-devanagari-iast-in-four-sections">glyphs: [symbol, meaning, devanagari, iast], in four sections</h2>
+</section>
+<section id="what-a-sound-types-a-few-unicode-characters-or-a-named-special-key" class="level2">
+<h2 class="anchored" data-anchor-id="what-a-sound-types-a-few-unicode-characters-or-a-named-special-key">what a sound types: a few Unicode characters, or a named special key</h2>
+<div id="5db5021b" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.434406+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.446227+00:00&quot;,&quot;total&quot;:0.011827574000001562}}" data-execution_count="6">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L45" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="cps" class="level3">
+<h3 class="anchored" data-anchor-id="cps">cps</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> cps(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    k</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>):</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+<div id="f0218cb1" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.446359+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.448692+00:00&quot;,&quot;total&quot;:0.0023356379999981414}}" data-execution_count="7">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L44" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="lab" class="level3">
+<h3 class="anchored" data-anchor-id="lab">lab</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> lab(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    k</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>):</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+<div id="99117639" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.448780+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.451046+00:00&quot;,&quot;total&quot;:0.0022686810000038804}}" data-execution_count="8">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L43" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="typed" class="level3">
+<h3 class="anchored" data-anchor-id="typed">typed</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> typed(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    sym, <span class="co"># "(…)" types "()", "₁, ₋₁, …" types "₁"</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>):</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+<div id="49a3b756" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.451133+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.453418+00:00&quot;,&quot;total&quot;:0.00228781700000269}}" data-execution_count="9">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L42" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="typable" class="level3">
+<h3 class="anchored" data-anchor-id="typable">typable</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> typable(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    t</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>):</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+</section>
+<section id="taught-sounds-a-name-and-up-to-12-embeddings-float32-blob-each" class="level2">
+<h2 class="anchored" data-anchor-id="taught-sounds-a-name-and-up-to-12-embeddings-float32-blob-each">taught sounds: a name and up to 12 embeddings (float32 blob) each</h2>
+<div id="f5e4d37a" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.458451+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.460717+00:00&quot;,&quot;total&quot;:0.0022692519999978344}}" data-execution_count="11">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L48" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="sound" class="level3">
+<h3 class="anchored" data-anchor-id="sound">Sound</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> Sound(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">id</span>:<span class="bu">int</span><span class="op">=</span><span class="va">None</span>, name:<span class="bu">str</span><span class="op">=</span><span class="st">''</span>, glyph:<span class="bu">str</span><span class="op">=</span><span class="st">''</span>, key:<span class="bu">str</span><span class="op">=</span><span class="st">''</span>, samples:<span class="bu">bytes</span><span class="op">=</span><span class="st">b''</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>)<span class="op">-&gt;</span><span class="va">None</span>:</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><em>Sound(id: int = None, name: str = ’‘, glyph: str =’‘, key: str =’‘, samples: bytes = b’’)</em></p>
+</section>
+</div>
+<div id="ebad3aa1" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.462300+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.464604+00:00&quot;,&quot;total&quot;:0.0023066409999970006}}" data-execution_count="13">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L57" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="add_ex" class="level3">
+<h3 class="anchored" data-anchor-id="add_ex">add_ex</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> add_ex(</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    s, e</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>):</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+<div id="a3502b46" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.464693+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.466974+00:00&quot;,&quot;total&quot;:0.002283879000003708}}" data-execution_count="14">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L56" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="skey" class="level3">
+<h3 class="anchored" data-anchor-id="skey">skey</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> skey(</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    s</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>):</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+<div id="de842610" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.467062+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.469299+00:00&quot;,&quot;total&quot;:0.0022400679999989848}}" data-execution_count="15">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L55" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="snd" class="level3">
+<h3 class="anchored" data-anchor-id="snd">snd</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> snd(</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    sym</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>):</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+<div id="98d5a095" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.469387+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.471601+00:00&quot;,&quot;total&quot;:0.0022172960000048647}}" data-execution_count="16">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L54" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="vecs" class="level3">
+<h3 class="anchored" data-anchor-id="vecs">vecs</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> vecs(</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    s</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>):</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+<div id="c484da00" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.471688+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.473928+00:00&quot;,&quot;total&quot;:0.002243735000000413}}" data-execution_count="17">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L53" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="blob" class="level3">
+<h3 class="anchored" data-anchor-id="blob">blob</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> blob(</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    x</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>):</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+<div id="d205b95b" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.475129+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.477775+00:00&quot;,&quot;total&quot;:0.002648908000004724}}" data-execution_count="19">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L60" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="newname" class="level3">
+<h3 class="anchored" data-anchor-id="newname">newname</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> newname(</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    taken</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>):</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><em>A made-up name like rum, row or reh</em></p>
+</section>
+</div>
+<div id="95e11285" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.479893+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.482711+00:00&quot;,&quot;total&quot;:0.002821480000001486}}" data-execution_count="22">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L76" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="rank" class="level3">
+<h3 class="anchored" data-anchor-id="rank">rank</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> rank(</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    e, keyed:<span class="bu">bool</span><span class="op">=</span><span class="va">False</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>):</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+<div id="f08f65e3" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.483520+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.485716+00:00&quot;,&quot;total&quot;:0.0021991320000012138}}" data-execution_count="24">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L84" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="hit" class="level3">
+<h3 class="anchored" data-anchor-id="hit">hit</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> hit():</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+<div id="586e7153" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.486714+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.489058+00:00&quot;,&quot;total&quot;:0.0023471670000034806}}" data-execution_count="26">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L87" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="embed" class="level3">
+<h3 class="anchored" data-anchor-id="embed">embed</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> embed(</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    audio</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>):</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+</section>
+<section id="page" class="level2">
+<h2 class="anchored" data-anchor-id="page">page</h2>
+<div id="d4aad2e5" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.492693+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.495222+00:00&quot;,&quot;total&quot;:0.002533333000002358}}" data-execution_count="29">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L103" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="nstat" class="level3">
+<h3 class="anchored" data-anchor-id="nstat">NStat</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> NStat():</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+<div id="d3b5a0fb" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.495315+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.497584+00:00&quot;,&quot;total&quot;:0.0022714760000042133}}" data-execution_count="30">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L102" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="hue" class="level3">
+<h3 class="anchored" data-anchor-id="hue">hue</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> hue(</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    i, n, <span class="co"># yellow at the first item, red at the last</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>):</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+<div id="88aea96b" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.499011+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.501797+00:00&quot;,&quot;total&quot;:0.0027893199999979856}}" data-execution_count="32">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L110" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="splash" class="level3">
+<h3 class="anchored" data-anchor-id="splash">Splash</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> Splash():</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+<div id="1a8f174e" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.503843+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.506669+00:00&quot;,&quot;total&quot;:0.002828723000000366}}" data-execution_count="35">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L124" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="page-1" class="level3">
+<h3 class="anchored" data-anchor-id="page-1">page</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> page(</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    cur, <span class="op">*</span>c</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>):</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+<div id="e0afe9fa" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.507983+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.510153+00:00&quot;,&quot;total&quot;:0.002172471000001508}}" data-execution_count="37">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L137" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="retry" class="level3">
+<h3 class="anchored" data-anchor-id="retry">retry</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> retry():</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+<div id="82608b0a" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.510270+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.512395+00:00&quot;,&quot;total&quot;:0.002127487999999289}}" data-execution_count="38">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L135" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="splash-1" class="level3">
+<h3 class="anchored" data-anchor-id="splash-1">splash</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> splash():</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+<div id="fb134c93" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.512481+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.514600+00:00&quot;,&quot;total&quot;:0.0021219679999973096}}" data-execution_count="39">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L133" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="nstat-1" class="level3">
+<h3 class="anchored" data-anchor-id="nstat-1">nstat</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> nstat():</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+</section>
+<section id="key-picker-type-any-characters-or-choose-a-special-key-blank-means-type-the-glyph" class="level2">
+<h2 class="anchored" data-anchor-id="key-picker-type-any-characters-or-choose-a-special-key-blank-means-type-the-glyph">key picker: type any characters, or choose a special key; blank means “type the glyph”</h2>
+<div id="2f743211" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.515745+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.518007+00:00&quot;,&quot;total&quot;:0.0022648850000024368}}" data-execution_count="41">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L140" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="ix" class="level3">
+<h3 class="anchored" data-anchor-id="ix">ix</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ix(</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    s</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>):</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+<div id="7150d3de" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.520006+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.523377+00:00&quot;,&quot;total&quot;:0.0033729649999969524}}" data-execution_count="43">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L144" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="keypick" class="level3">
+<h3 class="anchored" data-anchor-id="keypick">KeyPick</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> KeyPick(</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    s, ctx</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>):</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+<div id="decaedb5" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.524780+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.528313+00:00&quot;,&quot;total&quot;:0.0035388040000015053}}" data-execution_count="45">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L153" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="setkey" class="level3">
+<h3 class="anchored" data-anchor-id="setkey">setkey</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> setkey(</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">id</span>:<span class="bu">int</span>, f:<span class="bu">str</span>, v:<span class="bu">str</span><span class="op">=</span><span class="st">''</span>, ctx:<span class="bu">str</span><span class="op">=</span><span class="st">'row'</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>):</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+</section>
+<section id="sound-names-teach-a-sound-per-glyph-make-it-again-to-get-the-name-back" class="level2">
+<h2 class="anchored" data-anchor-id="sound-names-teach-a-sound-per-glyph-make-it-again-to-get-the-name-back">Sound Names: teach a sound per glyph, make it again to get the name back</h2>
+<div id="286aa952" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.529265+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.532056+00:00&quot;,&quot;total&quot;:0.002793127000003892}}" data-execution_count="47">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L162" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="notice" class="level3">
+<h3 class="anchored" data-anchor-id="notice">Notice</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> Notice(</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>    msg:<span class="bu">str</span><span class="op">=</span><span class="st">''</span>, err:<span class="bu">bool</span><span class="op">=</span><span class="va">False</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>):</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+<div id="27ef5b76" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.534166+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.538762+00:00&quot;,&quot;total&quot;:0.004598997000002214}}" data-execution_count="49">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L165" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="recog" class="level3">
+<h3 class="anchored" data-anchor-id="recog">Recog</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> Recog():</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+<div id="48185b82" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.539856+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.543525+00:00&quot;,&quot;total&quot;:0.0036714510000024347}}" data-execution_count="51">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L173" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="done" class="level3">
+<h3 class="anchored" data-anchor-id="done">done</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> done(</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    msg:<span class="bu">str</span><span class="op">=</span><span class="st">''</span>, err:<span class="bu">bool</span><span class="op">=</span><span class="va">False</span>, view:<span class="bu">str</span><span class="op">=</span><span class="st">'g'</span>, sel:<span class="bu">str</span><span class="op">=</span><span class="st">''</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>):</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+<div id="6bce2f97" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.545332+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.549821+00:00&quot;,&quot;total&quot;:0.004492910000003292}}" data-execution_count="53">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L176" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="tile" class="level3">
+<h3 class="anchored" data-anchor-id="tile">Tile</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> Tile(</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>    g, i, n, sel, s</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>):</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+<div id="4b8e04f6" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.552271+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.555576+00:00&quot;,&quot;total&quot;:0.0033063919999989366}}" data-execution_count="55">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L182" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="detail" class="level3">
+<h3 class="anchored" data-anchor-id="detail">Detail</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> Detail(</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>    sym:<span class="bu">str</span><span class="op">=</span><span class="st">''</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>):</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+<div id="fb21c62f" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.556986+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.559893+00:00&quot;,&quot;total&quot;:0.0029091520000008586}}" data-execution_count="57">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L193" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="row" class="level3">
+<h3 class="anchored" data-anchor-id="row">Row</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> Row(</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>    s, i, n</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>):</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+<div id="84e6b4ba" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.562036+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.565538+00:00&quot;,&quot;total&quot;:0.0035049510000035866}}" data-execution_count="59">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L201" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="lib" class="level3">
+<h3 class="anchored" data-anchor-id="lib">Lib</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> Lib(</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>    view:<span class="bu">str</span><span class="op">=</span><span class="st">'g'</span>, sel:<span class="bu">str</span><span class="op">=</span><span class="st">''</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>):</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+<div id="03f3e1d0" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.566669+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.568853+00:00&quot;,&quot;total&quot;:0.0021864379999954053}}" data-execution_count="61">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L217" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="detail-1" class="level3">
+<h3 class="anchored" data-anchor-id="detail-1">detail</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> detail(</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>    sym:<span class="bu">str</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>):</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+<div id="9991d2ef" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.568934+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.571150+00:00&quot;,&quot;total&quot;:0.002219099000001279}}" data-execution_count="62">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L215" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="lib-1" class="level3">
+<h3 class="anchored" data-anchor-id="lib-1">lib</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> lib(</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>    view:<span class="bu">str</span><span class="op">=</span><span class="st">'g'</span>, sel:<span class="bu">str</span><span class="op">=</span><span class="st">''</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>):</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+<div id="dd299961" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.572851+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.575701+00:00&quot;,&quot;total&quot;:0.002853138999995508}}" data-execution_count="64">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L221" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="names" class="level3">
+<h3 class="anchored" data-anchor-id="names">names</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> names():</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+<div id="2b421001" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.576595+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.578895+00:00&quot;,&quot;total&quot;:0.0023022430000025906}}" data-execution_count="66">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L231" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="learned" class="level3">
+<h3 class="anchored" data-anchor-id="learned">learned</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> learned(</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>    audio, view, sel, f</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>):</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+<div id="a5fc9415" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.580638+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.583567+00:00&quot;,&quot;total&quot;:0.0029324560000034694}}" data-execution_count="68">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L237" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="teach" class="level3">
+<h3 class="anchored" data-anchor-id="teach">teach</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> teach(</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>    audio:<span class="bu">str</span>, key:<span class="bu">str</span><span class="op">=</span><span class="st">''</span>, special:<span class="bu">str</span><span class="op">=</span><span class="st">''</span>, view:<span class="bu">str</span><span class="op">=</span><span class="st">'g'</span>, sel:<span class="bu">str</span><span class="op">=</span><span class="st">''</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>):</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+<div id="145f521c" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.584995+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.587777+00:00&quot;,&quot;total&quot;:0.0027843909999987204}}" data-execution_count="70">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L246" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="learn" class="level3">
+<h3 class="anchored" data-anchor-id="learn">learn</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> learn(</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>    audio:<span class="bu">str</span>, sym:<span class="bu">str</span>, view:<span class="bu">str</span><span class="op">=</span><span class="st">'g'</span>, sel:<span class="bu">str</span><span class="op">=</span><span class="st">''</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>):</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+<div id="33b72038" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.588943+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.591488+00:00&quot;,&quot;total&quot;:0.0025481609999999932}}" data-execution_count="72">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L255" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="more" class="level3">
+<h3 class="anchored" data-anchor-id="more">more</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> more(</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>    audio:<span class="bu">str</span>, <span class="bu">id</span>:<span class="bu">int</span>, view:<span class="bu">str</span><span class="op">=</span><span class="st">'g'</span>, sel:<span class="bu">str</span><span class="op">=</span><span class="st">''</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>):</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+<div id="33a4c034" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.592751+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.595321+00:00&quot;,&quot;total&quot;:0.00257327699999621}}" data-execution_count="74">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L261" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="recognize" class="level3">
+<h3 class="anchored" data-anchor-id="recognize">recognize</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> recognize(</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>    audio:<span class="bu">str</span>, view:<span class="bu">str</span><span class="op">=</span><span class="st">'g'</span>, sel:<span class="bu">str</span><span class="op">=</span><span class="st">''</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>):</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+<div id="ab97f396" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.596167+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.598402+00:00&quot;,&quot;total&quot;:0.002237663999999029}}" data-execution_count="76">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L270" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="rename" class="level3">
+<h3 class="anchored" data-anchor-id="rename">rename</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> rename(</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">id</span>:<span class="bu">int</span>, v:<span class="bu">str</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>):</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+<div id="3cdedbae" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.599771+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.601993+00:00&quot;,&quot;total&quot;:0.0022253710000015303}}" data-execution_count="78">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L276" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="forgetall" class="level3">
+<h3 class="anchored" data-anchor-id="forgetall">forgetall</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> forgetall():</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+<div id="4a19676a" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.602070+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.604558+00:00&quot;,&quot;total&quot;:0.0024911439999968366}}" data-execution_count="79">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L274" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="forget" class="level3">
+<h3 class="anchored" data-anchor-id="forget">forget</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> forget(</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">id</span>:<span class="bu">int</span>, view:<span class="bu">str</span><span class="op">=</span><span class="st">'g'</span>, sel:<span class="bu">str</span><span class="op">=</span><span class="st">''</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>):</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+</section>
+<section id="sound-keyboard-hold-a-key-make-a-sound-let-go-the-matching-sound-types-its-key." class="level2">
+<h2 class="anchored" data-anchor-id="sound-keyboard-hold-a-key-make-a-sound-let-go-the-matching-sound-types-its-key.">Sound Keyboard: hold a key, make a sound, let go; the matching sound types its key.</h2>
+<p>A web page cannot type into other apps, so the keys land in the box on this page.</p>
+<div id="afe94c46" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.605673+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.607868+00:00&quot;,&quot;total&quot;:0.002197649000002855}}" data-execution_count="81">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L280" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="msg" class="level3">
+<h3 class="anchored" data-anchor-id="msg">Msg</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> Msg(</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>    t, k:<span class="bu">str</span><span class="op">=</span><span class="st">''</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>):</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+<div id="ed9e0c36" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.607947+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.610399+00:00&quot;,&quot;total&quot;:0.002455098000005762}}" data-execution_count="82">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L279" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="kmeta" class="level3">
+<h3 class="anchored" data-anchor-id="kmeta">KMeta</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> KMeta(</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>    oob:<span class="bu">bool</span><span class="op">=</span><span class="va">False</span></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>):</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+<div id="e690f1a3" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.611458+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.613972+00:00&quot;,&quot;total&quot;:0.0025167630000026975}}" data-execution_count="84">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L283" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="krow" class="level3">
+<h3 class="anchored" data-anchor-id="krow">KRow</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> KRow(</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>    s, i, n</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>):</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+<div id="5b325e0b" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.615329+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.618060+00:00&quot;,&quot;total&quot;:0.0027336559999966425}}" data-execution_count="86">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L288" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="log" class="level3">
+<h3 class="anchored" data-anchor-id="log">Log</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> Log(</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>    oob:<span class="bu">bool</span><span class="op">=</span><span class="va">False</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>):</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+<div id="bf8791c8" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.620239+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.623633+00:00&quot;,&quot;total&quot;:0.0033971610000023134}}" data-execution_count="88">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L296" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="index" class="level3">
+<h3 class="anchored" data-anchor-id="index">index</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> index():</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+<div id="057e1d3b" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.625191+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.627552+00:00&quot;,&quot;total&quot;:0.0023636889999991695}}" data-execution_count="90">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L317" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="sysevents" class="level3">
+<h3 class="anchored" data-anchor-id="sysevents">sysevents</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sysevents():</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><em>Tells the page when the hold key goes down or up in any app. Needs Input Monitoring.</em></p>
+</section>
+</div>
+<div id="a7108cf7" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.627629+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.629719+00:00&quot;,&quot;total&quot;:0.002091841999998678}}" data-execution_count="91">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L315" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="sysprompt" class="level3">
+<h3 class="anchored" data-anchor-id="sysprompt">sysprompt</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sysprompt():</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+<div id="05ca5e6d" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.629792+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.631873+00:00&quot;,&quot;total&quot;:0.0020830160000002707}}" data-execution_count="92">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L313" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="sysstatus" class="level3">
+<h3 class="anchored" data-anchor-id="sysstatus">sysstatus</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sysstatus():</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+<div id="3795bcbc" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.634220+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.637654+00:00&quot;,&quot;total&quot;:0.0034373659999999973}}" data-execution_count="94">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L324" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="typekey" class="level3">
+<h3 class="anchored" data-anchor-id="typekey">typekey</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> typekey(</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>    audio:<span class="bu">str</span>, sys:<span class="bu">bool</span><span class="op">=</span><span class="va">False</span></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>):</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+<div id="d68e9c13" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.638500+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.640595+00:00&quot;,&quot;total&quot;:0.0020976429999990387}}" data-execution_count="96">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L339" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="clear" class="level3">
+<h3 class="anchored" data-anchor-id="clear">clear</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> clear():</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div>
+<div id="2bb4e1d1" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T03:38:09.646235+00:00&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T03:38:09.648435+00:00&quot;,&quot;total&quot;:0.0022021269999967785}}" data-execution_count="99">
+<hr>
+<p><a href="https://github.com/alix559/nadayantra/blob/main/nadayantra/main.py#L346" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="main" class="level3">
+<h3 class="anchored" data-anchor-id="main">main</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> main():</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><em>Run the web app on http://127.0.0.1:5001</em></p>
+</section>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/alix559\.github\.io\/nadayantra");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/alix559/nadayantra/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
